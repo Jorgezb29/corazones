@@ -24,7 +24,6 @@ const messages = [
 
 let currentMessage = 0;
 
-// Función para mostrar el mensaje
 function showMessage(x, y) {
   const msg = document.createElement("div");
   msg.className = "love-message";
@@ -37,20 +36,21 @@ function showMessage(x, y) {
 
   document.getElementById("message-container").appendChild(msg);
 
-  setTimeout(() => {
-    msg.remove();
-  }, 9000);
+  setTimeout(() => msg.remove(), 9000);
 
   currentMessage = (currentMessage + 1) % messages.length;
 }
 
-// Evento para PC (mouse click)
-document.body.addEventListener("click", (e) => {
-  showMessage(e.clientX, e.clientY);
-});
+// Detectar si es pantalla táctil
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-// Evento para pantallas táctiles
-document.body.addEventListener("touchstart", (e) => {
-  const touch = e.touches[0];
-  showMessage(touch.clientX, touch.clientY);
-});
+if (isTouch) {
+  document.body.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    showMessage(touch.clientX, touch.clientY);
+  });
+} else {
+  document.body.addEventListener("click", (e) => {
+    showMessage(e.clientX, e.clientY);
+  });
+}
